@@ -77,6 +77,57 @@ M30`);
   };
 
   /**
+   * Apply G-code transformations similar to the reference implementation
+   */
+  const applyTransformations = (lines: string[]): string[] => {
+    const transformedLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i].trim();
+
+      // --- Special Handling for F4000 block ---
+      if (line === "F4000" && 
+          lines[i+1]?.trim() === "Z0" && 
+          lines[i+2]?.trim().startsWith("X6.000000 Y1.500000") && 
+          lines[i+3]?.trim() === "F500") {
+        transformedLines.push("F4000");
+        transformedLines.push("Z-4");
+        transformedLines.push("Z-4.000000 X6.000000 Y6.000000");
+        transformedLines.push("F500");
+        i += 3;
+        continue;
+      }
+
+      // --- General Transformation Logic ---
+      // Regex to find lines with Z, X, and Y coordinates
+      const match = line.match(/^(Z[\d\.\-]+)\s*(X[\d\.\-]+)\s*(Y[\d\.\-]+)$/);
+
+      if (match) {
+        const yValueOrig = parseFloat(match[3].substring(1));
+        const xValueOrig = parseFloat(match[2].substring(1));
+        const newZPart = `Z${yValueOrig.toFixed(6)}`;
+        const newYPartFromX = `Y${xValueOrig.toFixed(6)}`;
+        line = `${newZPart} ${match[2]} ${newYPartFromX}`;
+      }
+
+      // Invert Y Sign
+      const invertYSignReplacer = (match: string, p1: string, p2: string) => {
+        const yValue = parseFloat(p2);
+        const invertedYValue = -yValue;
+        return `${p1}${invertedYValue.toFixed(6)}`;
+      };
+
+      if (!line.includes("Z-4.000000 X6.000000 Y6.000000")) {
+        line = line.replace(/(Y)([+-]?\d+\.?\d*)/g, invertYSignReplacer);
+      }
+      
+      transformedLines.push(line);
+    }
+
+    return transformedLines;
+  };
+
+  /**
    * Extracts the repeatable pattern block from G-code
    * This excludes header and footer commands, leaving only the coordinate movements
    */
@@ -111,10 +162,13 @@ M30`);
         throw new Error('Please enter valid numeric values for Y distance and repetitions');
       }
 
-      // Extract components from original G-code
-      const header = extractHeader(lines);
-      const repeatableBlock = extractRepeatableBlock(lines);
-      const footer = extractFooter(lines);
+      // Apply transformations to the original G-code first
+      const transformedLines = applyTransformations(lines);
+      
+      // Extract components from transformed G-code
+      const header = extractHeader(transformedLines);
+      const repeatableBlock = extractRepeatableBlock(transformedLines);
+      const footer = extractFooter(transformedLines);
 
       if (repeatableBlock.length === 0) {
         throw new Error('No repeatable pattern found in the G-code');
