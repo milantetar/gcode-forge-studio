@@ -97,7 +97,7 @@ M30`);
 
   /**
    * Main function to generate repeated G-code pattern
-   * Uses G91 (incremental mode) for Y-axis shifts between repetitions
+   * Increments Y values by distance for each repetition while keeping Z values unchanged
    */
   const generateRepeatedGcode = useCallback(() => {
     setIsProcessing(true);
@@ -127,26 +127,38 @@ M30`);
       result.push('% Generated G-code Pattern Repeater');
       result.push('% Original pattern repeated ' + reps + ' times');
       result.push('% Y-axis offset: ' + yDist + ' per repetition');
+      result.push('% Z values remain unchanged from original pattern');
       result.push('');
       result.push(...header);
-      
-      // Ensure we start in absolute mode for the first instance
-      result.push('G90 ; Absolute positioning mode');
       result.push('');
       
-      // Add first instance of the pattern (in absolute mode)
-      result.push('; === First Pattern Instance ===');
-      result.push(...repeatableBlock);
-      result.push('');
-
-      // Generate repeated instances
-      for (let i = 1; i < reps; i++) {
+      // Generate all instances including the first one
+      for (let i = 0; i < reps; i++) {
         result.push(`; === Pattern Instance ${i + 1} ===`);
-        result.push('G91 ; Switch to incremental positioning');
-        result.push(`G0 Y${yDist.toFixed(6)} ; Move ${yDist} units in Y direction`);
-        result.push('G90 ; Switch back to absolute positioning');
-        result.push('');
-        result.push(...repeatableBlock);
+        
+        // Process each line in the repeatable block
+        const modifiedBlock = repeatableBlock.map(line => {
+          // Match lines with coordinates (Z, X, Y format)
+          const coordMatch = line.match(/^(Z[\d\.\-]+)\s+(X[\d\.\-]+)\s+(Y[\d\.\-]+)(.*)$/);
+          
+          if (coordMatch) {
+            const zPart = coordMatch[1]; // Keep Z unchanged
+            const xPart = coordMatch[2]; // Keep X unchanged
+            const yPart = coordMatch[3]; // Modify Y value
+            const restPart = coordMatch[4] || ''; // Any additional content
+            
+            // Extract Y value and add the increment
+            const yValue = parseFloat(yPart.substring(1));
+            const newYValue = yValue + (yDist * i);
+            
+            return `${zPart} ${xPart} Y${newYValue.toFixed(6)}${restPart}`;
+          }
+          
+          // Return line unchanged if it doesn't match coordinate pattern
+          return line;
+        });
+        
+        result.push(...modifiedBlock);
         result.push('');
       }
 
