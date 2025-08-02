@@ -149,31 +149,56 @@ export const GcodeCustomConverter = () => {
       // Pattern Repeater: Repeat the pattern with Y offset if repetitions > 1
       if (repetitions > 1) {
         const originalLines = processedCode.split('\n');
-        const repeatedLines = [];
         
+        // Separate header, content, and footer
+        const headerLines = [];
+        const contentLines = [];
+        const footerLines = [];
+        
+        let inContent = false;
+        let inFooter = false;
+        
+        for (const line of originalLines) {
+          const trimmed = line.trim();
+          
+          // Footer detection (M5, M30, or final positioning)
+          if (trimmed === 'M5' || trimmed === 'M30' || (trimmed.startsWith('X') && trimmed.includes('0') && !trimmed.includes('Y'))) {
+            inFooter = true;
+          }
+          
+          // Header includes comments and initial setup commands
+          if (!inContent && !inFooter && (trimmed.startsWith('%') || trimmed.startsWith('G1') || trimmed.startsWith('M3') || trimmed === '')) {
+            headerLines.push(line);
+            if (trimmed.startsWith('M3')) {
+              inContent = true; // Start content after M3
+            }
+          } else if (inFooter) {
+            footerLines.push(line);
+          } else if (inContent && !inFooter) {
+            contentLines.push(line);
+          }
+        }
+        
+        // Create repeated patterns
+        const repeatedContent = [];
         for (let rep = 0; rep < repetitions; rep++) {
           const yOffset = rep * yDistance;
           
-          for (const line of originalLines) {
+          for (const line of contentLines) {
             if (line.trim().match(/Y(-?\d+(\.\d+)?)/)) {
-              // Apply Y offset to lines with Y coordinates
               const modifiedLine = line.replace(/Y(-?\d+(\.\d+)?)/g, (match, yValue) => {
                 const newY = parseFloat(yValue) + yOffset;
                 return `Y${newY.toFixed(6)}`;
               });
-              repeatedLines.push(modifiedLine);
+              repeatedContent.push(modifiedLine);
             } else {
-              repeatedLines.push(line);
+              repeatedContent.push(line);
             }
-          }
-          
-          // Add separator between repetitions (except for the last one)
-          if (rep < repetitions - 1) {
-            repeatedLines.push('');
           }
         }
         
-        processedCode = repeatedLines.join('\n');
+        // Combine header + repeated content + footer
+        processedCode = [...headerLines, ...repeatedContent, ...footerLines].join('\n');
       }
 
       setOutputGCode(processedCode);
