@@ -165,60 +165,91 @@ M30`);
       // Apply transformations to the original G-code first
       const transformedLines = applyTransformations(lines);
       
-      // Extract components from transformed G-code
-      const header = extractHeader(transformedLines);
-      const repeatableBlock = extractRepeatableBlock(transformedLines);
-      const footer = extractFooter(transformedLines);
+      // Separate header, content, and footer to prevent repeating setup commands
+      const headerLines = [];
+      const contentLines = [];
+      const footerLines = [];
+      
+      let inContent = false;
+      let inFooter = false;
+      
+      for (const line of transformedLines) {
+        const trimmed = line.trim();
+        
+        // Footer detection (M5, M30, Z0, X0)
+        if (trimmed === 'M5' || trimmed === 'M30' || (trimmed === 'Z0') || (trimmed === 'X0')) {
+          inFooter = true;
+        }
+        
+        // Header includes comments, G1 F10000, M3, and initial setup commands
+        if (!inContent && !inFooter && (
+          trimmed.startsWith('%') || 
+          trimmed.startsWith('G1') || 
+          trimmed === 'M3' || 
+          trimmed === 'F4000' ||
+          trimmed === 'Z-4' ||
+          (trimmed.includes('Z-4.000000') && trimmed.includes('X6.000000') && trimmed.includes('Y6.000000')) ||
+          trimmed === 'F500' ||
+          trimmed === ''
+        )) {
+          headerLines.push(line);
+          // Start content after the initial setup block
+          if (trimmed === 'F500') {
+            inContent = true;
+          }
+        } else if (inFooter) {
+          footerLines.push(line);
+        } else if (inContent && !inFooter) {
+          contentLines.push(line);
+        }
+      }
 
-      if (repeatableBlock.length === 0) {
+      if (contentLines.length === 0) {
         throw new Error('No repeatable pattern found in the G-code');
       }
 
       // Build the final G-code
       const result = [];
       
-      // Add header
+      // Add header comments
       result.push('% Generated G-code Pattern Repeater');
       result.push('% Original pattern repeated ' + reps + ' times');
       result.push('% Y-axis offset: ' + yDist + ' per repetition');
-      result.push('% Z values remain unchanged from original pattern');
-      result.push('');
-      result.push(...header);
       result.push('');
       
-      // Generate all instances including the first one
+      // Add header commands (only once)
+      result.push(...headerLines.filter(line => line.trim()));
+      result.push('');
+      
+      // Generate repeated content with Y offset
       for (let i = 0; i < reps; i++) {
-        result.push(`; === Pattern Instance ${i + 1} ===`);
+        result.push(`; === Pattern ${i + 1} ===`);
         
-        // Process each line in the repeatable block
-        const modifiedBlock = repeatableBlock.map(line => {
-          // Match lines with coordinates (Z, X, Y format)
-          const coordMatch = line.match(/^(Z[\d\.\-]+)\s+(X[\d\.\-]+)\s+(Y[\d\.\-]+)(.*)$/);
+        // Process each line in the content block
+        const modifiedBlock = contentLines.map(line => {
+          const trimmed = line.trim();
+          if (!trimmed) return line;
           
-          if (coordMatch) {
-            const zPart = coordMatch[1]; // Keep Z unchanged
-            const xPart = coordMatch[2]; // Keep X unchanged
-            const yPart = coordMatch[3]; // Modify Y value
-            const restPart = coordMatch[4] || ''; // Any additional content
-            
-            // Extract Y value and add the increment
-            const yValue = parseFloat(yPart.substring(1));
-            const newYValue = yValue + (yDist * i);
-            
-            return `${zPart} ${xPart} Y${newYValue.toFixed(6)}${restPart}`;
+          // Apply Y offset to lines with Y coordinates
+          if (trimmed.match(/Y(-?\d+(\.\d+)?)/)) {
+            const modifiedLine = trimmed.replace(/Y(-?\d+(\.\d+)?)/g, (match, yValue) => {
+              const currentY = parseFloat(yValue);
+              const newY = currentY + (yDist * i);
+              return `Y${newY.toFixed(6)}`;
+            });
+            return modifiedLine;
           }
           
-          // Return line unchanged if it doesn't match coordinate pattern
-          return line;
+          return trimmed;
         });
         
-        result.push(...modifiedBlock);
+        result.push(...modifiedBlock.filter(line => line.trim()));
         result.push('');
       }
 
-      // Add footer
+      // Add footer (only once)
       result.push('; === Program End ===');
-      result.push(...footer);
+      result.push(...footerLines.filter(line => line.trim()));
 
       setGeneratedGcode(result.join('\n'));
       
