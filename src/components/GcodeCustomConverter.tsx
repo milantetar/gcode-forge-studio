@@ -318,7 +318,7 @@ export const GcodeCustomConverter = () => {
                   type="number"
                   min="1"
                   value={repetitions}
-                  onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value) || 1))}
+                  onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value)))}
                   className="w-full"
                   placeholder="Enter number of repetitions"
                 />
@@ -332,7 +332,7 @@ export const GcodeCustomConverter = () => {
                   type="number"
                   step="0.1"
                   value={yDistance}
-                  onChange={(e) => setYDistance(parseFloat(e.target.value) || 0)}
+                  onChange={(e) => setYDistance(parseFloat(e.target.value))}
                   className="w-full"
                   placeholder="Enter Y distance"
                 />
