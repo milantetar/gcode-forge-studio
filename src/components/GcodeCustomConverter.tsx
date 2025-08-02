@@ -4,6 +4,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Copy, Zap } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 
 // Default G-code for the input field
@@ -73,6 +75,8 @@ export const GcodeCustomConverter = () => {
   const [inputGCode, setInputGCode] = useState(initialGCode);
   const [outputGCode, setOutputGCode] = useState('');
   const [error, setError] = useState('');
+  const [repetitions, setRepetitions] = useState(1);
+  const [yDistance, setYDistance] = useState(0);
 
   /**
    * Main function to convert G-code based on a sequence of rules.
@@ -141,6 +145,36 @@ export const GcodeCustomConverter = () => {
           tempLines3.push(line.replace(/X(-?\d+(\.\d+)?)/g, 'X0'));
       }
       processedCode = tempLines3.join('\n');
+
+      // Pattern Repeater: Repeat the pattern with Y offset if repetitions > 1
+      if (repetitions > 1) {
+        const originalLines = processedCode.split('\n');
+        const repeatedLines = [];
+        
+        for (let rep = 0; rep < repetitions; rep++) {
+          const yOffset = rep * yDistance;
+          
+          for (const line of originalLines) {
+            if (line.trim().match(/Y(-?\d+(\.\d+)?)/)) {
+              // Apply Y offset to lines with Y coordinates
+              const modifiedLine = line.replace(/Y(-?\d+(\.\d+)?)/g, (match, yValue) => {
+                const newY = parseFloat(yValue) + yOffset;
+                return `Y${newY.toFixed(6)}`;
+              });
+              repeatedLines.push(modifiedLine);
+            } else {
+              repeatedLines.push(line);
+            }
+          }
+          
+          // Add separator between repetitions (except for the last one)
+          if (rep < repetitions - 1) {
+            repeatedLines.push('');
+          }
+        }
+        
+        processedCode = repeatedLines.join('\n');
+      }
 
       setOutputGCode(processedCode);
       toast({
@@ -242,6 +276,45 @@ export const GcodeCustomConverter = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Pattern Repeater Controls */}
+        <Card className="border-accent/20 shadow-elegant">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold text-primary">Pattern Repeater</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="repetitions" className="text-sm font-medium text-foreground">
+                  Number of Repetitions
+                </Label>
+                <Input
+                  id="repetitions"
+                  type="number"
+                  min="1"
+                  value={repetitions}
+                  onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full"
+                  placeholder="Enter number of repetitions"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="yDistance" className="text-sm font-medium text-foreground">
+                  Y Distance Between Patterns
+                </Label>
+                <Input
+                  id="yDistance"
+                  type="number"
+                  step="0.1"
+                  value={yDistance}
+                  onChange={(e) => setYDistance(parseFloat(e.target.value) || 0)}
+                  className="w-full"
+                  placeholder="Enter Y distance"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Action Button and Error Message */}
         <div className="text-center space-y-4">
