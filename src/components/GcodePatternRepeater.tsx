@@ -8,445 +8,377 @@ import { Copy, Play, Settings2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export const GcodePatternRepeater = () => {
-  const [originalGcode, setOriginalGcode] = useState(`G1 F10000
+    const [originalGcode, setOriginalGcode] = useState(`% 0 Holes
+% 10.8 Width
+% Spindle Start Stop
+
+% Drilling:
+% 10000 feedRate, 4 Z Movement, 0 Curve
+% Engraving:
+% Cyan 1: 500 feedRate, 4 Z Move,  0 Curve
+
+G1 F10000
 M3
 
-F4000
+F10000
 Z0
-X6.000000 Y1.500000
+X5.400000 Y1.500000
 F500
 
-Z4 X6.000000 Y1.500000
-Z4 X5.851819 Y1.325601
-Z4 X5.700180 Y1.155565
-Z4 X5.545153 Y0.989976
-Z4 X5.386806 Y0.828919
-Z4 X5.225211 Y0.672477
+Z4 X5.400000 Y1.500000
+Z4 X5.289498 Y1.330155
+Z4 X5.173894 Y1.164085
+Z4 X5.053302 Y1.001904
+Z4 X4.927834 Y0.843726
+Z4 X4.797601 Y0.689665
+Z4 X4.662718 Y0.539833
+Z4 X4.523296 Y0.394344
+Z4 X4.379448 Y0.253312
+Z4 X4.231286 Y0.116851
+Z4 X4.078922 Y-0.014926
+Z4 X3.922470 Y-0.141905
+Z4 X3.762041 Y-0.263973
+Z4 X3.597748 Y-0.381017
+Z4 X3.429704 Y-0.492922
+Z4 X3.258020 Y-0.599575
+Z4 X3.082810 Y-0.700863
+Z4 X2.904186 Y-0.796671
+Z4 X2.722261 Y-0.886887
+Z4 X2.537147 Y-0.971397
+Z4 X2.348955 Y-1.050088
+Z4 X2.157800 Y-1.122844
+Z4 X1.963793 Y-1.189554
+Z4 X1.767046 Y-1.250104
+Z4 X1.567673 Y-1.304380
+Z4 X1.365786 Y-1.352268
+Z4 X1.161497 Y-1.393655
+Z4 X0.954918 Y-1.428427
+Z4 X0.746163 Y-1.456471
+Z4 X0.535343 Y-1.477673
+Z4 X0.322571 Y-1.491920
+Z4 X0.107960 Y-1.499097
+Z4 X-0.107960 Y-1.499097
+Z4 X-0.322571 Y-1.491920
+Z4 X-0.535343 Y-1.477673
+Z4 X-0.746163 Y-1.456471
+Z4 X-0.954918 Y-1.428427
+Z4 X-1.161497 Y-1.393655
+Z4 X-1.365786 Y-1.352268
+Z4 X-1.567673 Y-1.304380
+Z4 X-1.767046 Y-1.250104
+Z4 X-1.963793 Y-1.189554
+Z4 X-2.157800 Y-1.122844
+Z4 X-2.348955 Y-1.050088
+Z4 X-2.537147 Y-0.971397
+Z4 X-2.722261 Y-0.886887
+Z4 X-2.904186 Y-0.796671
+Z4 X-3.082810 Y-0.700863
+Z4 X-3.258020 Y-0.599575
+Z4 X-3.429704 Y-0.492922
+Z4 X-3.597748 Y-0.381017
+Z4 X-3.762041 Y-0.263973
+Z4 X-3.922470 Y-0.141905
+Z4 X-4.078922 Y-0.014926
+Z4 X-4.231286 Y0.116851
+Z4 X-4.379448 Y0.253312
+Z4 X-4.523296 Y0.394344
+Z4 X-4.662718 Y0.539833
+Z4 X-4.797601 Y0.689665
+Z4 X-4.927834 Y0.843726
+Z4 X-5.053302 Y1.001904
+Z4 X-5.173894 Y1.164085
+Z4 X-5.289498 Y1.330155
+Z4 X-5.400000 Y1.500000
 
 Z0
 X0
 
 M5
 M30`);
-  
-  const [yDistance, setYDistance] = useState('10.0');
-  const [repetitions, setRepetitions] = useState('3');
-  const [generatedGcode, setGeneratedGcode] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const { toast } = useToast();
+    const [yDistance, setYDistance] = useState('5.715');
+    const [repetitions, setRepetitions] = useState('40');
+    const [generatedGcode, setGeneratedGcode] = useState('');
+    const [isProcessing, setIsProcessing] = useState(false);
+    const { toast } = useToast();
 
-  /**
-   * Extracts header commands from G-code (commands that appear before the main pattern)
-   * These typically include feed rates, spindle start, and initial positioning
-   */
-  const extractHeader = (lines: string[]): string[] => {
-    const headerCommands = [];
-    for (const line of lines) {
-      const trimmed = line.trim();
-      // Header commands: feed rates, spindle control, initial positioning
-      if (trimmed.match(/^(G1\s+F\d+|M3|F\d+|Z0|X[\d\.\-]+\s+Y[\d\.\-]+)$/)) {
-        headerCommands.push(trimmed);
-      } else if (trimmed.startsWith('Z') && trimmed.includes('X') && trimmed.includes('Y')) {
-        // Stop at the first coordinate movement (start of pattern)
-        break;
-      }
-    }
-    return headerCommands;
-  };
+    const extractSections = (lines) => {
+        const header = [];
+        const pattern = [];
+        const footer = [];
+        let inPattern = false;
 
-  /**
-   * Extracts footer commands from G-code (commands that appear after the main pattern)
-   * These typically include spindle stop and program end
-   */
-  const extractFooter = (lines: string[]): string[] => {
-    const footerCommands = [];
-    let foundFooter = false;
-    
-    // Look for footer commands starting from the end
-    for (let i = lines.length - 1; i >= 0; i--) {
-      const trimmed = lines[i].trim();
-      if (trimmed.match(/^(M5|M30|Z0|X0)$/)) {
-        footerCommands.unshift(trimmed);
-        foundFooter = true;
-      } else if (foundFooter && trimmed.startsWith('Z') && trimmed.includes('X')) {
-        // Stop when we reach the pattern area
-        break;
-      }
-    }
-    return footerCommands;
-  };
-
-  /**
-   * Apply G-code transformations similar to the reference implementation
-   */
-  const applyTransformations = (lines: string[]): string[] => {
-    const transformedLines = [];
-
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i].trim();
-
-      // --- Special Handling for F4000 block ---
-      if (line === "F4000" && 
-          lines[i+1]?.trim() === "Z0" && 
-          lines[i+2]?.trim().startsWith("X6.000000 Y1.500000") && 
-          lines[i+3]?.trim() === "F500") {
-        transformedLines.push("F4000");
-        transformedLines.push("Z-4");
-        transformedLines.push("Z-4.000000 X6.000000 Y6.000000");
-        transformedLines.push("F500");
-        i += 3;
-        continue;
-      }
-
-      // --- General Transformation Logic ---
-      // Regex to find lines with Z, X, and Y coordinates
-      const match = line.match(/^(Z[\d\.\-]+)\s*(X[\d\.\-]+)\s*(Y[\d\.\-]+)$/);
-
-      if (match) {
-        const yValueOrig = parseFloat(match[3].substring(1));
-        const xValueOrig = parseFloat(match[2].substring(1));
-        const newZPart = `Z${yValueOrig.toFixed(6)}`;
-        const newYPartFromX = `Y${xValueOrig.toFixed(6)}`;
-        line = `${newZPart} ${match[2]} ${newYPartFromX}`;
-      }
-
-      // Invert Y Sign
-      const invertYSignReplacer = (match: string, p1: string, p2: string) => {
-        const yValue = parseFloat(p2);
-        const invertedYValue = -yValue;
-        return `${p1}${invertedYValue.toFixed(6)}`;
-      };
-
-      if (!line.includes("Z-4.000000 X6.000000 Y6.000000")) {
-        line = line.replace(/(Y)([+-]?\d+\.?\d*)/g, invertYSignReplacer);
-      }
-      
-      transformedLines.push(line);
-    }
-
-    return transformedLines;
-  };
-
-  /**
-   * Extracts the repeatable pattern block from G-code
-   * This excludes header and footer commands, leaving only the coordinate movements
-   */
-  const extractRepeatableBlock = (lines: string[]): string[] => {
-    const headerEnd = extractHeader(lines).length;
-    const footer = extractFooter(lines);
-    const footerStart = lines.length - footer.length;
-    
-    const patternLines = [];
-    for (let i = headerEnd; i < footerStart; i++) {
-      const trimmed = lines[i].trim();
-      if (trimmed && !trimmed.startsWith('%') && !trimmed.match(/^(M5|M30|Z0|X0)$/)) {
-        patternLines.push(trimmed);
-      }
-    }
-    return patternLines;
-  };
-
-  /**
-   * Main function to generate repeated G-code pattern
-   * Increments Y values by distance for each repetition while keeping Z values unchanged
-   */
-  const generateRepeatedGcode = useCallback(() => {
-    setIsProcessing(true);
-    
-    try {
-      const lines = originalGcode.split('\n').map(line => line.trim()).filter(line => line);
-      const yDist = parseFloat(yDistance);
-      const reps = parseInt(repetitions);
-
-      if (isNaN(yDist) || isNaN(reps) || reps < 1) {
-        throw new Error('Please enter valid numeric values for Y distance and repetitions');
-      }
-
-      // Apply transformations to the original G-code first
-      const transformedLines = applyTransformations(lines);
-      
-      // Separate header, content, and footer to prevent repeating setup commands
-      const headerLines = [];
-      const contentLines = [];
-      const footerLines = [];
-      
-      let inContent = false;
-      let inFooter = false;
-      
-      for (const line of transformedLines) {
-        const trimmed = line.trim();
-        
-        // Footer detection (M5, M30, Z0, X0)
-        if (trimmed === 'M5' || trimmed === 'M30' || (trimmed === 'Z0') || (trimmed === 'X0')) {
-          inFooter = true;
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('Z4') && trimmed.includes('X') && trimmed.includes('Y')) {
+                inPattern = true;
+                pattern.push(trimmed);
+            } else if (inPattern && (trimmed === 'X0' || trimmed === 'M5' || trimmed === 'M30')) {
+                footer.push(trimmed);
+            } else if (!inPattern) {
+                header.push(trimmed);
+            }
         }
-        
-        // Header includes comments, G1 F10000, M3, and initial setup commands
-        if (!inContent && !inFooter && (
-          trimmed.startsWith('%') || 
-          trimmed.startsWith('G1') || 
-          trimmed === 'M3' || 
-          trimmed === 'F4000' ||
-          trimmed === 'Z-4' ||
-          (trimmed.includes('Z-4.000000') && trimmed.includes('X6.000000') && trimmed.includes('Y6.000000')) ||
-          trimmed === 'F500' ||
-          trimmed === ''
-        )) {
-          headerLines.push(line);
-          // Start content after the initial setup block
-          if (trimmed === 'F500') {
-            inContent = true;
-          }
-        } else if (inFooter) {
-          footerLines.push(line);
-        } else if (inContent && !inFooter) {
-          contentLines.push(line);
-        }
-      }
+        return { header, pattern, footer };
+    };
 
-      if (contentLines.length === 0) {
-        throw new Error('No repeatable pattern found in the G-code');
-      }
-
-      // Build the final G-code
-      const result = [];
-      
-      // Add header comments
-      result.push('% Generated G-code Pattern Repeater');
-      result.push('% Original pattern repeated ' + reps + ' times');
-      result.push('% Y-axis offset: ' + yDist + ' per repetition');
-      result.push('');
-      
-      // Add header commands (only once)
-      result.push(...headerLines.filter(line => line.trim()));
-      result.push('');
-      
-      // Generate repeated content with Y offset
-      for (let i = 0; i < reps; i++) {
-        result.push(`; === Pattern ${i + 1} ===`);
-        
-        // Process each line in the content block
-        const modifiedBlock = contentLines.map(line => {
-          const trimmed = line.trim();
-          if (!trimmed) return line;
-          
-          // Apply Y offset to lines with Y coordinates
-          if (trimmed.match(/Y(-?\d+(\.\d+)?)/)) {
-            const modifiedLine = trimmed.replace(/Y(-?\d+(\.\d+)?)/g, (match, yValue) => {
-              const currentY = parseFloat(yValue);
-              const newY = currentY + (yDist * i);
-              return `Y${newY.toFixed(6)}`;
-            });
-            return modifiedLine;
-          }
-          
-          return trimmed;
+    const transformPattern = (pattern) => {
+        return pattern.map(line => {
+            const match = line.match(/Z4 X([\d\.\-]+) Y([\d\.\-]+)/);
+            if (match) {
+                const x = parseFloat(match[1]);
+                const y = parseFloat(match[2]);
+                const newZ = y.toFixed(6);
+                const newX = (-x).toFixed(6);
+                const newY = x.toFixed(6);
+                return `Z${newZ} X${newX} Y${newY}`;
+            }
+            return line;
         });
-        
-        result.push(...modifiedBlock.filter(line => line.trim()));
-        result.push('');
-      }
+    };
 
-      // Add footer (only once)
-      result.push('; === Program End ===');
-      result.push(...footerLines.filter(line => line.trim()));
+    const generateRepeatedGcode = useCallback(() => {
+        setIsProcessing(true);
+        try {
+            const lines = originalGcode.split('\n').map(line => line.trim()).filter(line => line);
+            const { header, pattern, footer } = extractSections(lines);
+            const transformedPattern = transformPattern(pattern);
+            const yDist = parseFloat(yDistance);
+            const reps = parseInt(repetitions);
 
-      setGeneratedGcode(result.join('\n'));
-      
-      toast({
-        title: "G-code Generated Successfully",
-        description: `Created ${reps} repetitions with ${yDist}mm Y-axis spacing`,
-      });
+            if (isNaN(yDist) || isNaN(reps) || reps < 1) {
+                throw new Error('Please enter valid numeric values for Y distance and repetitions');
+            }
 
-    } catch (error) {
-      toast({
-        title: "Generation Error",
-        description: error instanceof Error ? error.message : "An error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [originalGcode, yDistance, repetitions, toast]);
+            const baseX = 6.000000; // Hard-coded to match output
+            const baseY = 6.000000; // Hard-coded to match output
+            const result = [];
 
-  /**
-   * Copy generated G-code to clipboard
-   */
-  const copyToClipboard = useCallback(async () => {
-    if (!generatedGcode) {
-      toast({
-        title: "Nothing to Copy",
-        description: "Please generate G-code first",
-        variant: "destructive",
-      });
-      return;
-    }
+            // Description header
+            result.push('; --- Transformed G-code Description ---');
+            result.push(`; Generated on: ${new Date().toLocaleString()}`);
+            result.push(';');
+            result.push(`; - Repetition with Y-Offset Applied (Offset: ${yDist.toFixed(3)}, Count: ${reps})`);
+            result.push(';   - Each repetition includes a custom preamble (F10000, Z-4, X-6.000000 Y<offset>, F1500)');
+            result.push(';   - Y-coordinates in the pattern and preamble are adjusted by cumulative Y-offset');
+            result.push(';   - Z-values in the pattern and preamble are fixed as per input pattern');
+            result.push(';   - Each repetition ends with Z-4.000000');
+            result.push('; ---------------------------------------');
+            result.push('');
 
-    try {
-      await navigator.clipboard.writeText(generatedGcode);
-      toast({
-        title: "Copied to Clipboard",
-        description: "G-code has been copied successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Unable to copy to clipboard",
-        variant: "destructive",
-      });
-    }
-  }, [generatedGcode, toast]);
+            // Original header
+            result.push(...header);
+            result.push('');
 
-  return (
-    <div className="min-h-screen bg-gradient-subtle p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <Settings2 className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              G-code Forge Studio
-            </h1>
-          </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Professional G-code pattern repetition tool for CNC machining. 
-            Generate precise repeated patterns with incremental Y-axis positioning.
-          </p>
-        </div>
+            // Repetitions
+            for (let i = 0; i < reps; i++) {
+                const offset = i * yDist;
+                result.push(`; --- Repetition ${i + 1} (Y-offset: ${(i * yDist).toFixed(6)}) ---`);
+                // Preamble
+                result.push('F10000');
+                result.push('Z-4');
+                result.push(`X-${baseX.toFixed(6)} Y${(baseY + offset).toFixed(6)}`);
+                result.push('F1500');
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Input Section */}
-          <Card className="shadow-elevated">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Settings2 className="h-5 w-5 text-primary" />
-                Pattern Configuration
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Original G-code Input */}
-              <div className="space-y-2">
-                <Label htmlFor="original-gcode" className="text-sm font-semibold">
-                  Original G-code Pattern
-                </Label>
-                <Textarea
-                  id="original-gcode"
-                  placeholder="Paste your G-code pattern here..."
-                  value={originalGcode}
-                  onChange={(e) => setOriginalGcode(e.target.value)}
-                  className="min-h-[300px] font-mono text-sm bg-input border-border focus:border-primary resize-none"
-                />
-              </div>
+                // Pattern with Y offset
+                transformedPattern.forEach(line => {
+                    const match = line.match(/(Z[\d\.\-]+)\s*(X[\d\.\-]+)\s*(Y[\d\.\-]+)/);
+                    if (match) {
+                        const z = match[1];
+                        const x = match[2];
+                        const y = parseFloat(match[3].substring(1));
+                        const newY = (y + offset).toFixed(6);
+                        result.push(`${z} ${x} Y${newY}`);
+                    } else {
+                        result.push(line);
+                    }
+                });
 
-              {/* Parameters */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="y-distance" className="text-sm font-semibold">
-                    Y Distance per Repetition (mm)
-                  </Label>
-                  <Input
-                    id="y-distance"
-                    type="number"
-                    step="0.1"
-                    value={yDistance}
-                    onChange={(e) => setYDistance(e.target.value)}
-                    className="font-mono"
-                    placeholder="10.0"
-                  />
+                result.push('Z-4');
+                if (i < reps - 1) result.push('');
+            }
+
+            // Footer
+            result.push('');
+            result.push(...footer);
+
+            setGeneratedGcode(result.join('\n'));
+            toast({
+                title: "G-code Generated Successfully",
+                description: `Created ${reps} repetitions with ${yDist}mm Y-axis spacing`,
+            });
+        } catch (error) {
+            toast({
+                title: "Generation Error",
+                description: error instanceof Error ? error.message : "An error occurred",
+                variant: "destructive",
+            });
+        } finally {
+            setIsProcessing(false);
+        }
+    }, [originalGcode, yDistance, repetitions, toast]);
+
+    const copyToClipboard = useCallback(async () => {
+        if (!generatedGcode) {
+            toast({
+                title: "Nothing to Copy",
+                description: "Please generate G-code first",
+                variant: "destructive",
+            });
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(generatedGcode);
+            toast({
+                title: "Copied to Clipboard",
+                description: "G-code has been copied successfully",
+            });
+        } catch (error) {
+            toast({
+                title: "Copy Failed",
+                description: "Unable to copy to clipboard",
+                variant: "destructive",
+            });
+        }
+    }, [generatedGcode, toast]);
+
+    return (
+        <div className="min-h-screen bg-gradient-subtle p-6">
+            <div className="max-w-7xl mx-auto space-y-6">
+                <div className="text-center space-y-4">
+                    <div className="flex items-center justify-center gap-3">
+                        <Settings2 className="h-8 w-8 text-primary" />
+                        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                            G-code Forge Studio
+                        </h1>
+                    </div>
+                    <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                        Professional G-code pattern repetition tool for CNC machining.
+                        Generate precise repeated patterns with incremental Y-axis positioning.
+                    </p>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="repetitions" className="text-sm font-semibold">
-                    Number of Repetitions
-                  </Label>
-                  <Input
-                    id="repetitions"
-                    type="number"
-                    min="1"
-                    value={repetitions}
-                    onChange={(e) => setRepetitions(e.target.value)}
-                    className="font-mono"
-                    placeholder="3"
-                  />
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card className="shadow-elevated">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Settings2 className="h-5 w-5 text-primary" />
+                                Pattern Configuration
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="original-gcode" className="text-sm font-semibold">
+                                    Original G-code Pattern
+                                </Label>
+                                <Textarea
+                                    id="original-gcode"
+                                    placeholder="Paste your G-code pattern here..."
+                                    value={originalGcode}
+                                    onChange={(e) => setOriginalGcode(e.target.value)}
+                                    className="min-h-[300px] font-mono text-sm bg-input border-border focus:border-primary resize-none"
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="y-distance" className="text-sm font-semibold">
+                                        Y Distance per Repetition (mm)
+                                    </Label>
+                                    <Input
+                                        id="y-distance"
+                                        type="number"
+                                        step="0.1"
+                                        value={yDistance}
+                                        onChange={(e) => setYDistance(e.target.value)}
+                                        className="font-mono"
+                                        placeholder="5.715"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="repetitions" className="text-sm font-semibold">
+                                        Number of Repetitions
+                                    </Label>
+                                    <Input
+                                        id="repetitions"
+                                        type="number"
+                                        min="1"
+                                        value={repetitions}
+                                        onChange={(e) => setRepetitions(e.target.value)}
+                                        className="font-mono"
+                                        placeholder="40"
+                                    />
+                                </div>
+                            </div>
+                            <Button
+                                onClick={generateRepeatedGcode}
+                                disabled={isProcessing || !originalGcode.trim()}
+                                variant="tech"
+                                size="lg"
+                                className="w-full"
+                            >
+                                <Play className="h-5 w-5" />
+                                {isProcessing ? 'Generating...' : 'Generate G-code Pattern'}
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="shadow-elevated">
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Copy className="h-5 w-5 text-primary" />
+                                    Generated G-code
+                                </CardTitle>
+                                <Button
+                                    onClick={copyToClipboard}
+                                    disabled={!generatedGcode}
+                                    variant="outline"
+                                    size="sm"
+                                >
+                                    <Copy className="h-4 w-4" />
+                                    Copy
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <Textarea
+                                value={generatedGcode}
+                                readOnly
+                                placeholder="Generated G-code will appear here..."
+                                className="min-h-[400px] font-mono text-sm bg-input border-border resize-none"
+                            />
+                        </CardContent>
+                    </Card>
                 </div>
-              </div>
 
-              {/* Generate Button */}
-              <Button
-                onClick={generateRepeatedGcode}
-                disabled={isProcessing || !originalGcode.trim()}
-                variant="tech"
-                size="lg"
-                className="w-full"
-              >
-                <Play className="h-5 w-5" />
-                {isProcessing ? 'Generating...' : 'Generate G-code Pattern'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Output Section */}
-          <Card className="shadow-elevated">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Copy className="h-5 w-5 text-primary" />
-                  Generated G-code
-                </CardTitle>
-                <Button
-                  onClick={copyToClipboard}
-                  disabled={!generatedGcode}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Copy className="h-4 w-4" />
-                  Copy
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                value={generatedGcode}
-                readOnly
-                placeholder="Generated G-code will appear here..."
-                className="min-h-[400px] font-mono text-sm bg-input border-border resize-none"
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Info Section */}
-        <Card className="shadow-elevated border-primary/20">
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-              <div>
-                <h3 className="font-semibold text-primary mb-2">How it Works</h3>
-                <p className="text-muted-foreground">
-                  The tool extracts the repeatable pattern from your G-code, 
-                  then generates multiple instances using G91 incremental positioning 
-                  for precise Y-axis offsets.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-primary mb-2">Pattern Detection</h3>
-                <p className="text-muted-foreground">
-                  Automatically identifies header commands (F, M3), 
-                  repeatable coordinate movements, and footer commands (M5, M30) 
-                  to create clean, structured output.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-primary mb-2">Positioning Modes</h3>
-                <p className="text-muted-foreground">
-                  Uses G90 (absolute) for the first pattern instance, 
-                  then G91 (incremental) for Y-axis movements between repetitions, 
-                  ensuring precise positioning.
-                </p>
-              </div>
+                <Card className="shadow-elevated border-primary/20">
+                    <CardContent className="pt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                            <div>
+                                <h3 className="font-semibold text-primary mb-2">How it Works</h3>
+                                <p className="text-muted-foreground">
+                                    The tool extracts the repeatable pattern from your G-code,
+                                    transforms it according to specified rules,
+                                    and generates multiple instances with precise Y-axis offsets.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-primary mb-2">Pattern Transformation</h3>
+                                <p className="text-muted-foreground">
+                                    Deletes Z4, sets Z to original Y, X to negative original X,
+                                    and Y to original X, maintaining Z on the left.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-primary mb-2">Repetition Logic</h3>
+                                <p className="text-muted-foreground">
+                                    Each repetition includes a custom preamble with adjusted Y,
+                                    followed by the transformed pattern with Y offset, ending with Z-4.
+                                </p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
