@@ -1,21 +1,141 @@
-import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Copy, Play, Settings2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useCallback, FC, ReactNode, useEffect } from 'react';
+import { Copy, Play } from 'lucide-react';
 
-export const GcodePatternRepeater = () => {
-    const [originalGcode, setOriginalGcode] = useState(`% 0 Holes
+// --- UI Component Definitions (Styled for the new theme) ---
+
+const Button: FC<{
+    children: ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+    variant?: 'primary' | 'secondary';
+    size?: 'sm' | 'lg' | 'default';
+    className?: string;
+}> = ({ children, onClick, disabled, variant = 'primary', size = 'default', className = '' }) => (
+    <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`inline-flex items-center justify-center rounded-md text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d1117] disabled:pointer-events-none disabled:opacity-50
+      ${variant === 'primary' ? 'bg-cyan-500 text-gray-900 hover:bg-cyan-600' : 'border border-[#30363d] bg-[#21262d] text-gray-300 hover:bg-gray-800'}
+      ${size === 'sm' ? 'h-9 px-3' : size === 'lg' ? 'h-11 px-8 text-base' : 'h-10 px-4 py-2'}
+      ${className}`}
+    >
+        {children}
+    </button>
+);
+
+const Textarea: FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({ className, ...props }) => (
+    <textarea
+        className={`flex w-full h-full rounded-md border-2 border-transparent bg-gray-900 p-4 text-sm text-gray-300 font-mono placeholder:text-gray-500 focus-visible:outline-none focus-visible:border-cyan-400 disabled:cursor-not-allowed disabled:opacity-50 resize-none ${className}`}
+        {...props}
+    />
+);
+
+const Card: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
+    <div className={`rounded-lg border border-[#30363d] bg-[#161b22] text-gray-300 shadow-md flex flex-col ${className}`}>{children}</div>
+);
+
+const CardHeader: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
+    <div className={`flex items-center justify-between p-4 border-b border-[#30363d] ${className}`}>{children}</div>
+);
+
+const CardTitle: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
+    <h3 className={`text-lg font-semibold leading-none tracking-tight text-cyan-400 ${className}`}>{children}</h3>
+);
+
+const CardContent: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
+    <div className={`flex-grow p-0 ${className}`}>{children}</div>
+);
+
+const Alert: FC<{ children: ReactNode; variant?: 'destructive'; className?: string }> = ({ children, variant, className }) => (
+    <div
+        role="alert"
+        className={`relative w-full rounded-lg border p-4 text-white
+      ${variant === 'destructive' ? 'border-red-500/50 bg-red-900/50 text-red-300' : ''}
+      ${className}`}
+    >
+        {children}
+    </div>
+);
+
+const AlertDescription: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
+    <div className={`text-sm ${className}`}>{children}</div>
+);
+
+const Input: FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ className, ...props }) => (
+    <input
+        className={`flex h-10 w-full rounded-md border border-[#30363d] bg-gray-900 px-3 py-2 text-sm text-gray-300 ring-offset-gray-900 placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+        {...props}
+    />
+);
+
+const Label: FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ className, ...props }) => (
+    <label className={`text-sm font-medium leading-none text-gray-400 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${className}`} {...props} />
+);
+
+// --- Custom Toast Hook Implementation ---
+
+interface ToastProps {
+    title: string;
+    description: string;
+    variant?: 'default' | 'destructive';
+}
+
+interface ToastState extends ToastProps {
+    id: number;
+}
+
+let toastId = 0;
+const listeners: Array<(toasts: ToastState[]) => void> = [];
+let toasts: ToastState[] = [];
+
+const toast = (props: ToastProps) => {
+    const id = toastId++;
+    toasts = [...toasts, { ...props, id }];
+    listeners.forEach(listener => listener(toasts));
+    setTimeout(() => {
+        toasts = toasts.filter(t => t.id !== id);
+        listeners.forEach(listener => listener(toasts));
+    }, 5000);
+};
+
+const useToast = () => {
+    const [state, setState] = useState(toasts);
+    useEffect(() => {
+        listeners.push(setState);
+        return () => {
+            const index = listeners.indexOf(setState);
+            if (index > -1) {
+                listeners.splice(index, 1);
+            }
+        };
+    }, [state]);
+    return { toasts: state, toast };
+};
+
+const Toaster: FC = () => {
+    const { toasts: toastMessages } = useToast();
+    return (
+        <div className="fixed top-0 right-0 z-[100] p-4 space-y-2">
+            {toastMessages.map(({ id, title, description, variant }) => (
+                <Alert key={id} variant={variant as 'destructive' | undefined} className="bg-[#161b22] border-[#30363d] shadow-lg">
+                    <h3 className="text-base text-white font-semibold mb-1">{title}</h3>
+                    <AlertDescription className="text-gray-400">{description}</AlertDescription>
+                </Alert>
+            ))}
+        </div>
+    );
+};
+
+
+// Initial G-code for the input field
+const initialGCode = `% 0 Holes
 % 10.8 Width
 % Spindle Start Stop
 
 % Drilling:
 % 10000 feedRate, 4 Z Movement, 0 Curve
 % Engraving:
-% Cyan 1: 500 feedRate, 4 Z Move,  0 Curve
+% Cyan 1: 500 feedRate, 4 Z Move,  0 Curve
 
 G1 F10000
 M3
@@ -23,7 +143,7 @@ M3
 F10000
 Z0
 X5.400000 Y1.500000
-F500
+F1500
 
 Z4 X5.400000 Y1.500000
 Z4 X5.289498 Y1.330155
@@ -90,40 +210,46 @@ Z4 X-5.173894 Y1.164085
 Z4 X-5.289498 Y1.330155
 Z4 X-5.400000 Y1.500000
 
-Z0
 X0
-
 M5
-M30`);
-    const [yDistance, setYDistance] = useState('5.715');
-    const [repetitions, setRepetitions] = useState('40');
-    const [generatedGcode, setGeneratedGcode] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);
-    const { toast } = useToast();
+M30`;
 
-    const extractSections = (lines) => {
-        const header = [];
-        const pattern = [];
-        const footer = [];
+const GcodePatternRepeater: FC = () => {
+    const [originalGcode, setOriginalGcode] = useState(initialGCode);
+    const [generatedGcode, setGeneratedGcode] = useState('');
+    const [error, setError] = useState('');
+    const [repetitions, setRepetitions] = useState(1);
+    const [yDistance, setYDistance] = useState(0);
+
+    const extractSections = (lines: string[]) => {
+        const header: string[] = [];
+        const pattern: string[] = [];
+        const footer: string[] = [];
         let inPattern = false;
+        let inFooter = false;
 
         for (const line of lines) {
             const trimmed = line.trim();
-            if (trimmed.startsWith('Z4') && trimmed.includes('X') && trimmed.includes('Y')) {
-                inPattern = true;
-                pattern.push(trimmed);
-            } else if (inPattern && (trimmed === 'X0' || trimmed === 'M5' || trimmed === 'M30')) {
-                footer.push(trimmed);
-            } else if (!inPattern) {
-                header.push(trimmed);
+            if (trimmed === 'M5' || trimmed === 'M30' || (trimmed.startsWith('X') && trimmed.includes('0') && !trimmed.includes('Y'))) {
+                inFooter = true;
+            }
+            if (!inPattern && !inFooter && (trimmed.startsWith('%') || trimmed.startsWith('G1') || trimmed.startsWith('M3') || trimmed === '')) {
+                header.push(line);
+                if (trimmed.startsWith('M3')) inPattern = true;
+            } else if (inFooter) {
+                footer.push(line);
+            } else if (inPattern && !inFooter) {
+                if (trimmed.startsWith('Z4') && trimmed.includes('X') && trimmed.includes('Y')) {
+                    pattern.push(trimmed);
+                }
             }
         }
         return { header, pattern, footer };
     };
 
-    const transformPattern = (pattern) => {
+    const transformPattern = (pattern: string[]): string[] => {
         return pattern.map(line => {
-            const match = line.match(/Z4 X([\d\.\-]+) Y([\d\.\-]+)/);
+            const match = line.match(/Z4 X([-\d.]+) Y([-\d.]+)/);
             if (match) {
                 const x = parseFloat(match[1]);
                 const y = parseFloat(match[2]);
@@ -137,164 +263,166 @@ M30`);
     };
 
     const generateRepeatedGcode = useCallback(() => {
-        setIsProcessing(true);
         try {
+            setError('');
             const lines = originalGcode.split('\n').map(line => line.trim()).filter(line => line);
             const { header, pattern, footer } = extractSections(lines);
-            const transformedPattern = transformPattern(pattern);
-            const yDist = parseFloat(yDistance);
-            const reps = parseInt(repetitions);
 
-            if (isNaN(yDist) || isNaN(reps) || reps < 1) {
-                throw new Error('Please enter valid numeric values for Y distance and repetitions');
+            if (pattern.length === 0) {
+                throw new Error("No pattern found. Ensure some lines start with 'Z4' and contain X/Y coordinates.");
             }
 
-            const baseX = 6.000000; // Hard-coded to match output
-            const baseY = 6.000000; // Hard-coded to match output
-            const result = [];
+            const transformedPattern = transformPattern(pattern);
+            const reps = Math.max(1, parseInt(repetitions.toString(), 10));
+            const yDist = parseFloat(yDistance.toString());
 
-            // Description header
-            result.push('; --- Transformed G-code Description ---');
-            result.push(`; Generated on: ${new Date().toLocaleString()}`);
-            result.push(';');
-            result.push(`; - Repetition with Y-Offset Applied (Offset: ${yDist.toFixed(3)}, Count: ${reps})`);
-            result.push(';   - Each repetition includes a custom preamble (F10000, Z-4, X-6.000000 Y<offset>, F1500)');
-            result.push(';   - Y-coordinates in the pattern and preamble are adjusted by cumulative Y-offset');
-            result.push(';   - Z-values in the pattern and preamble are fixed as per input pattern');
-            result.push(';   - Each repetition ends with Z-4.000000');
-            result.push('; ---------------------------------------');
-            result.push('');
+            if (isNaN(yDist) || isNaN(reps)) {
+                throw new Error('Please enter valid numeric values for Y distance and repetitions.');
+            }
 
-            // Original header
-            result.push(...header);
-            result.push('');
+            const result: string[] = [];
+            result.push(...header.filter(line => line.startsWith('%') || line.startsWith('G1') || line.startsWith('M3')), '');
 
-            // Repetitions
             for (let i = 0; i < reps; i++) {
                 const offset = i * yDist;
-                result.push(`; --- Repetition ${i + 1} (Y-offset: ${(i * yDist).toFixed(6)}) ---`);
-                // Preamble
-                result.push('F10000');
-                result.push('Z-4');
-                result.push(`X-${baseX.toFixed(6)} Y${(baseY + offset).toFixed(6)}`);
-                result.push('F1500');
+                result.push(`; --- Repetition ${i + 1} (Y-offset: ${offset.toFixed(6)}) ---`);
 
-                // Pattern with Y offset
-                transformedPattern.forEach(line => {
-                    const match = line.match(/(Z[\d\.\-]+)\s*(X[\d\.\-]+)\s*(Y[\d\.\-]+)/);
-                    if (match) {
-                        const z = match[1];
-                        const x = match[2];
-                        const y = parseFloat(match[3].substring(1));
-                        const newY = (y + offset).toFixed(6);
-                        result.push(`${z} ${x} Y${newY}`);
-                    } else {
-                        result.push(line);
-                    }
-                });
-
+                if (i === 0) {
+                    result.push('F10000');
+                    result.push('Z-4');
+                    result.push('Z-4.000000 X0.000000 Y0.000000');
+                    result.push('F1500');
+                    result.push(...transformedPattern);
+                } else {
+                    result.push('F10000');
+                    result.push('Z-4');
+                    const baseY = 6.000000;
+                    result.push(`X-6.000000 Y${(baseY + offset).toFixed(6)}`);
+                    result.push('F1500');
+                    transformedPattern.forEach(line => {
+                        const match = line.match(/(Z[-\d.]+)\s*(X[-\d.]+)\s*(Y[-\d.]+)/);
+                        if (match) {
+                            const z = match[1];
+                            const x = match[2];
+                            const y = parseFloat(match[3].substring(1));
+                            const newY = (y + offset).toFixed(6);
+                            result.push(`${z} ${x} Y${newY}`);
+                        }
+                    });
+                }
                 result.push('Z-4');
                 if (i < reps - 1) result.push('');
             }
 
-            // Footer
-            result.push('');
-            result.push(...footer);
-
+            result.push('', ...footer);
             setGeneratedGcode(result.join('\n'));
             toast({
-                title: "G-code Generated Successfully",
-                description: `Created ${reps} repetitions with ${yDist}mm Y-axis spacing`,
+                title: "G-code Generated",
+                description: `Created ${reps} repetitions successfully.`,
             });
-        } catch (error) {
+        } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
+            setError(errorMessage);
             toast({
                 title: "Generation Error",
-                description: error instanceof Error ? error.message : "An error occurred",
+                description: errorMessage,
                 variant: "destructive",
             });
-        } finally {
-            setIsProcessing(false);
         }
-    }, [originalGcode, yDistance, repetitions, toast]);
+    }, [originalGcode, repetitions, yDistance]);
 
-    const copyToClipboard = useCallback(async () => {
-        if (!generatedGcode) {
-            toast({
-                title: "Nothing to Copy",
-                description: "Please generate G-code first",
-                variant: "destructive",
-            });
-            return;
-        }
+    const copyToClipboard = async () => {
+        if (!generatedGcode) return;
         try {
             await navigator.clipboard.writeText(generatedGcode);
             toast({
                 title: "Copied to Clipboard",
-                description: "G-code has been copied successfully",
+                description: "The generated G-code has been copied.",
             });
-        } catch (error) {
+        } catch (err) {
             toast({
                 title: "Copy Failed",
-                description: "Unable to copy to clipboard",
+                description: "Could not copy G-code to clipboard.",
                 variant: "destructive",
             });
         }
-    }, [generatedGcode, toast]);
+    };
 
     return (
-        <div className="min-h-screen bg-gradient-subtle p-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-                <div className="text-center space-y-4">
-                    <div className="flex items-center justify-center gap-3">
-                        <Settings2 className="h-8 w-8 text-primary" />
-                        <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                            G-code Forge Studio
+        <>
+            <style>{`
+                ::-webkit-scrollbar {
+                    width: 8px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: #0d1117;
+                }
+                ::-webkit-scrollbar-thumb {
+                    background-color: #2c333a;
+                    border-radius: 4px;
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    background-color: #3a424a;
+                }
+            `}</style>
+            <div className="min-h-screen bg-[#0d1117] text-gray-300 font-sans p-6 sm:p-8">
+                <Toaster />
+                <div className="max-w-7xl mx-auto space-y-8">
+                    <div className="text-center space-y-4">
+                        <h1 className="text-4xl sm:text-5xl font-bold text-white">
+                            G-code Pattern Repeater
                         </h1>
+                        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                            A tool to generate repeated, transformed G-code patterns with incremental Y-axis positioning for CNC machining.
+                        </p>
                     </div>
-                    <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                        Professional G-code pattern repetition tool for CNC machining.
-                        Generate precise repeated patterns with incremental Y-axis positioning.
-                    </p>
-                </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card className="shadow-elevated">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Settings2 className="h-5 w-5 text-primary" />
-                                Pattern Configuration
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="original-gcode" className="text-sm font-semibold">
-                                    Original G-code Pattern
-                                </Label>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" style={{ minHeight: '450px' }}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Input G-Code</CardTitle>
+                            </CardHeader>
+                            <CardContent>
                                 <Textarea
-                                    id="original-gcode"
-                                    placeholder="Paste your G-code pattern here..."
                                     value={originalGcode}
                                     onChange={(e) => setOriginalGcode(e.target.value)}
-                                    className="min-h-[300px] font-mono text-sm bg-input border-border focus:border-primary resize-none"
+                                    placeholder="Paste your G-code here..."
                                 />
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="y-distance" className="text-sm font-semibold">
-                                        Y Distance per Repetition (mm)
-                                    </Label>
-                                    <Input
-                                        id="y-distance"
-                                        type="number"
-                                        step="0.1"
-                                        value={yDistance}
-                                        onChange={(e) => setYDistance(e.target.value)}
-                                        className="font-mono"
-                                        placeholder="5.715"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="repetitions" className="text-sm font-semibold">
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Generated G-Code</CardTitle>
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={copyToClipboard}
+                                    disabled={!generatedGcode}
+                                    className="gap-2"
+                                >
+                                    <Copy className="w-4 h-4" />
+                                    Copy
+                                </Button>
+                            </CardHeader>
+                            <CardContent>
+                                <Textarea
+                                    value={generatedGcode}
+                                    readOnly
+                                    placeholder="Generated code will appear here..."
+                                />
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-white">Pattern Repeater Controls</CardTitle>
+                        </CardHeader>
+                        <div className="p-6 pt-0">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center">
+                                <div className="space-y-2 text-center w-full max-w-xs">
+                                    <Label htmlFor="repetitions">
                                         Number of Repetitions
                                     </Label>
                                     <Input
@@ -302,83 +430,44 @@ M30`);
                                         type="number"
                                         min="1"
                                         value={repetitions}
-                                        onChange={(e) => setRepetitions(e.target.value)}
-                                        className="font-mono"
-                                        placeholder="40"
+                                        onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value) || 1))}
+                                    />
+                                </div>
+                                <div className="space-y-2 text-center w-full max-w-xs">
+                                    <Label htmlFor="yDistance">
+                                        Y Distance Between Patterns
+                                    </Label>
+                                    <Input
+                                        id="yDistance"
+                                        type="number"
+                                        step="0.1"
+                                        value={yDistance}
+                                        onChange={(e) => setYDistance(parseFloat(e.target.value) || 0)}
                                     />
                                 </div>
                             </div>
-                            <Button
-                                onClick={generateRepeatedGcode}
-                                disabled={isProcessing || !originalGcode.trim()}
-                                variant="tech"
-                                size="lg"
-                                className="w-full"
-                            >
-                                <Play className="h-5 w-5" />
-                                {isProcessing ? 'Generating...' : 'Generate G-code Pattern'}
-                            </Button>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="shadow-elevated">
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="flex items-center gap-2">
-                                    <Copy className="h-5 w-5 text-primary" />
-                                    Generated G-code
-                                </CardTitle>
-                                <Button
-                                    onClick={copyToClipboard}
-                                    disabled={!generatedGcode}
-                                    variant="outline"
-                                    size="sm"
-                                >
-                                    <Copy className="h-4 w-4" />
-                                    Copy
-                                </Button>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <Textarea
-                                value={generatedGcode}
-                                readOnly
-                                placeholder="Generated G-code will appear here..."
-                                className="min-h-[400px] font-mono text-sm bg-input border-border resize-none"
-                            />
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <Card className="shadow-elevated border-primary/20">
-                    <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                            <div>
-                                <h3 className="font-semibold text-primary mb-2">How it Works</h3>
-                                <p className="text-muted-foreground">
-                                    The tool extracts the repeatable pattern from your G-code,
-                                    transforms it according to specified rules,
-                                    and generates multiple instances with precise Y-axis offsets.
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-primary mb-2">Pattern Transformation</h3>
-                                <p className="text-muted-foreground">
-                                    Deletes Z4, sets Z to original Y, X to negative original X,
-                                    and Y to original X, maintaining Z on the left.
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-primary mb-2">Repetition Logic</h3>
-                                <p className="text-muted-foreground">
-                                    Each repetition includes a custom preamble with adjusted Y,
-                                    followed by the transformed pattern with Y offset, ending with Z-4.
-                                </p>
-                            </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    </Card>
+
+                    <div className="text-center space-y-4">
+                        <Button
+                            onClick={generateRepeatedGcode}
+                            size="lg"
+                            className="gap-2"
+                        >
+                            <Play className="w-5 h-5" />
+                            Generate Pattern
+                        </Button>
+                        {error && (
+                            <Alert variant="destructive" className="max-w-md mx-auto">
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
+
+export default GcodePatternRepeater;

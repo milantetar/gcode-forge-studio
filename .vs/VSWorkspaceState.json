@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\public",
+    "\\src",
+    "\\src\\components"
   ],
-  "SelectedNode": "\\C:\\Users\\Shivani\\Source\\Repos\\gcode-forge-studio",
+  "SelectedNode": "\\src\\components\\GcodePatternRepeater.tsx",
   "PreviewInSolutionExplorer": false
 }
