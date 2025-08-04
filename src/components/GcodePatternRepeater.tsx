@@ -428,9 +428,9 @@ const GcodePatternRepeater: FC = () => {
                                     <Input
                                         id="repetitions"
                                         type="number"
-                                        min="1"
+                                        min="40"
                                         value={repetitions}
-                                        onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value) || 1))}
+                                        onChange={(e) => setRepetitions(Math.max(1, parseInt(e.target.value)))}
                                     />
                                 </div>
                                 <div className="space-y-2 text-center w-full max-w-xs">
@@ -440,9 +440,9 @@ const GcodePatternRepeater: FC = () => {
                                     <Input
                                         id="yDistance"
                                         type="number"
-                                        step="0.1"
+                                        step="5.715"
                                         value={yDistance}
-                                        onChange={(e) => setYDistance(parseFloat(e.target.value) || 0)}
+                                        onChange={(e) => setYDistance(parseFloat(e.target.value))}
                                     />
                                 </div>
                             </div>
