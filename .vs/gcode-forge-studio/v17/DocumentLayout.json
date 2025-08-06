@@ -3,52 +3,56 @@
   "WorkspaceRootPath": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GcodePatternRepeater.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GcodeCustomConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\Index.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\NotFound.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\NotFound.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\main.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\vite-env.d.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\vite-env.d.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Navigation.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeTwoAxisConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GcodeTwoAxisConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\hooks\\use-mobile.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\hooks\\use-mobile.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\lib\\supabase.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\lib\\supabase.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Navigation.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\.env.example||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.env.example||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GcodeCustomConverter.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\AuthPage.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\auth\\AuthPage.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\contexts\\AuthContext.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\contexts\\AuthContext.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\RegisterForm.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\auth\\RegisterForm.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\LoginForm.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\auth\\LoginForm.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\lib\\utils.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\lib\\utils.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\UserMenu.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\auth\\UserMenu.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GcodePatternRepeater.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\Index.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -71,129 +75,44 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GcodePatternRepeater.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx",
-              "RelativeDocumentMoniker": "src\\components\\GcodePatternRepeater.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx",
-              "RelativeToolTip": "src\\components\\GcodePatternRepeater.tsx",
-              "ViewState": "AgIAAEEBAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Title": "Navigation.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx",
+              "RelativeDocumentMoniker": "src\\components\\Navigation.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx",
+              "RelativeToolTip": "src\\components\\Navigation.tsx",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAowHIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T16:51:53.122Z",
+              "WhenOpened": "2025-08-06T06:19:01.4Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "GcodeCustomConverter.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx",
-              "RelativeDocumentMoniker": "src\\components\\GcodeCustomConverter.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx",
-              "RelativeToolTip": "src\\components\\GcodeCustomConverter.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T17:02:08.066Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx",
-              "RelativeDocumentMoniker": "src\\pages\\Index.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx",
-              "RelativeToolTip": "src\\pages\\Index.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T16:41:25.983Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "main.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\main.tsx",
-              "RelativeDocumentMoniker": "src\\main.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\main.tsx",
-              "RelativeToolTip": "src\\main.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T18:33:53.302Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "App.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\App.tsx",
-              "RelativeDocumentMoniker": "src\\App.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\App.tsx",
-              "RelativeToolTip": "src\\App.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T18:34:07.131Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "NotFound.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\NotFound.tsx",
-              "RelativeDocumentMoniker": "src\\pages\\NotFound.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\NotFound.tsx",
-              "RelativeToolTip": "src\\pages\\NotFound.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T18:34:11.732Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "index.css",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\index.css",
-              "RelativeDocumentMoniker": "src\\index.css",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\index.css",
-              "RelativeToolTip": "src\\index.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-08-02T18:33:52.105Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "vite-env.d.ts",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\vite-env.d.ts",
-              "RelativeDocumentMoniker": "src\\vite-env.d.ts",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\vite-env.d.ts",
-              "RelativeToolTip": "src\\vite-env.d.ts",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T18:33:50.568Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "use-mobile.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\hooks\\use-mobile.tsx",
-              "RelativeDocumentMoniker": "src\\hooks\\use-mobile.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\hooks\\use-mobile.tsx",
-              "RelativeToolTip": "src\\hooks\\use-mobile.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T16:53:45.724Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
               "Title": "GcodeTwoAxisConverter.tsx",
               "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeTwoAxisConverter.tsx",
               "RelativeDocumentMoniker": "src\\components\\GcodeTwoAxisConverter.tsx",
               "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeTwoAxisConverter.tsx",
               "RelativeToolTip": "src\\components\\GcodeTwoAxisConverter.tsx",
-              "ViewState": "AgIAAPwAAAAAAAAAAAAAABYBAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T14:10:03.912Z"
+              "WhenOpened": "2025-08-06T05:30:03.287Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 6,
+              "Title": "AuthContext.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\contexts\\AuthContext.tsx",
+              "RelativeDocumentMoniker": "src\\contexts\\AuthContext.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\contexts\\AuthContext.tsx",
+              "RelativeToolTip": "src\\contexts\\AuthContext.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-06T05:29:40.261Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "utils.ts",
               "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\lib\\utils.ts",
               "RelativeDocumentMoniker": "src\\lib\\utils.ts",
@@ -201,19 +120,119 @@
               "RelativeToolTip": "src\\lib\\utils.ts",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T16:53:38.948Z"
+              "WhenOpened": "2025-08-06T04:57:46.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": ".env.example",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\.env.example",
+              "RelativeDocumentMoniker": ".env.example",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\.env.example",
+              "RelativeToolTip": ".env.example",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-06T04:57:02.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "supabase.ts",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\lib\\supabase.ts",
+              "RelativeDocumentMoniker": "src\\lib\\supabase.ts",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\lib\\supabase.ts",
+              "RelativeToolTip": "src\\lib\\supabase.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-06T04:56:51.898Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthPage.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\AuthPage.tsx",
+              "RelativeDocumentMoniker": "src\\components\\auth\\AuthPage.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\AuthPage.tsx",
+              "RelativeToolTip": "src\\components\\auth\\AuthPage.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-06T04:56:40.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RegisterForm.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\RegisterForm.tsx",
+              "RelativeDocumentMoniker": "src\\components\\auth\\RegisterForm.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\RegisterForm.tsx",
+              "RelativeToolTip": "src\\components\\auth\\RegisterForm.tsx",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-06T04:56:34.363Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "Navigation.tsx",
-              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx",
-              "RelativeDocumentMoniker": "src\\components\\Navigation.tsx",
-              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\Navigation.tsx",
-              "RelativeToolTip": "src\\components\\Navigation.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAAAAAAAAAAAA==",
+              "Title": "UserMenu.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\UserMenu.tsx",
+              "RelativeDocumentMoniker": "src\\components\\auth\\UserMenu.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\UserMenu.tsx",
+              "RelativeToolTip": "src\\components\\auth\\UserMenu.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-08-02T14:07:02.946Z"
+              "WhenOpened": "2025-08-06T04:56:32.976Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "LoginForm.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\LoginForm.tsx",
+              "RelativeDocumentMoniker": "src\\components\\auth\\LoginForm.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\auth\\LoginForm.tsx",
+              "RelativeToolTip": "src\\components\\auth\\LoginForm.tsx",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-06T04:56:31.304Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Index.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx",
+              "RelativeDocumentMoniker": "src\\pages\\Index.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\pages\\Index.tsx",
+              "RelativeToolTip": "src\\pages\\Index.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-03T18:25:33.255Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GcodeCustomConverter.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx",
+              "RelativeDocumentMoniker": "src\\components\\GcodeCustomConverter.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodeCustomConverter.tsx",
+              "RelativeToolTip": "src\\components\\GcodeCustomConverter.tsx",
+              "ViewState": "AgIAANgAAAAAAAAAAAAYwOgAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-03T18:00:07.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GcodePatternRepeater.tsx",
+              "DocumentMoniker": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx",
+              "RelativeDocumentMoniker": "src\\components\\GcodePatternRepeater.tsx",
+              "ToolTip": "C:\\Users\\Shivani\\source\\repos\\gcode-forge-studio\\src\\components\\GcodePatternRepeater.tsx",
+              "RelativeToolTip": "src\\components\\GcodePatternRepeater.tsx",
+              "ViewState": "AgIAAJIBAAAAAAAAAAAlwLUBAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-08-02T16:51:53.122Z"
             }
           ]
         }

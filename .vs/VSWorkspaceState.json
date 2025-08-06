@@ -3,8 +3,13 @@
     "",
     "\\public",
     "\\src",
-    "\\src\\components"
+    "\\src\\components",
+    "\\src\\components\\auth",
+    "\\src\\contexts",
+    "\\src\\hooks",
+    "\\src\\lib",
+    "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\GcodePatternRepeater.tsx",
+  "SelectedNode": "\\src\\lib\\supabase.ts",
   "PreviewInSolutionExplorer": false
 }
