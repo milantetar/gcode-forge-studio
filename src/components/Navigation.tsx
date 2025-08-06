@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Repeat, Settings, Move, User } from 'lucide-react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Repeat, Settings, Move } from 'lucide-react';
 
 // Mock Authentication Context
 const AuthContext = React.createContext({ user: { name: 'User' } });
-const useAuth = () => React.useContext(AuthContext);
+const useAuth = () => useContext(AuthContext);
 
 // Themed Placeholder Components
 const Card = ({ className, children }: { className?: string; children: React.ReactNode }) => (
@@ -24,11 +24,15 @@ const Button = ({ variant, className, children, onClick }: { variant?: string; c
     );
 };
 
-const UserMenu = () => (
-    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-400 text-slate-900 font-bold hover:bg-cyan-300 transition-all duration-200 shadow-md shadow-cyan-500/20 flex-shrink-0">
-        <User className="w-5 h-5" />
-    </button>
-);
+const UserMenu = () => {
+    const { user } = useAuth();
+    const initial = user.name.charAt(0).toUpperCase();
+    return (
+        <button className="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-400 text-slate-900 font-bold hover:bg-cyan-300 transition-all duration-200 shadow-md shadow-cyan-500/20 flex-shrink-0">
+            <span className="text-lg">{initial}</span>
+        </button>
+    );
+};
 
 interface NavigationProps {
     currentApp: 'repeater' | 'converter' | 'twoAxis';
