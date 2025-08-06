@@ -3,6 +3,7 @@ import { Repeat, Settings, Move, User } from 'lucide-react';
 
 // --- Themed Placeholder Components ---
 // These are stand-ins for your UI components, styled to match the dark theme.
+// The core logic and classes have been updated for the new layout.
 
 const Card = ({ className, children }) => (
     // Card with a dark background, subtle border, and rounded corners.
@@ -34,34 +35,35 @@ const UserMenu = () => (
     </button>
 );
 
-// --- Responsive Navigation Component (Hybrid Layout) ---
-// This version uses a vertical list on mobile and a horizontal scroll on desktop.
+// --- Responsive Navigation Component (Themed & Improved) ---
+// This version implements horizontal scrolling for the buttons on mobile.
 
 const Navigation = ({ currentApp, onAppChange }) => {
     return (
         <Card className="p-4 md:p-5 w-full">
             {/* Main container stacks title/controls on mobile, and aligns them side-by-side on desktop */}
-            <div className="flex flex-col lg:flex-row gap-4 justify-between">
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
 
                 {/* Left Side: Title and Subtitle */}
-                <div className="w-full text-center lg:w-auto lg:text-left self-start lg:self-center">
+                <div className="text-center lg:text-left self-start lg:self-center">
                     <h2 className="text-lg font-bold text-cyan-400">G-Code Tools</h2>
                     <p className="text-xs text-slate-400">Choose your G-code processing tool</p>
                 </div>
 
                 {/* Right Side: All controls (Buttons + User Menu). */}
-                <div className="flex flex-col lg:flex-row items-center gap-4 w-full lg:w-auto">
+                <div className="flex items-center gap-4 w-full lg:w-auto">
 
-                    {/* This container changes its layout based on screen size.
-                      - On mobile (<lg), it's a standard block element containing a vertical list.
-                      - On desktop (>=lg), it becomes a flexible, horizontally-scrolling container.
+                    {/* Horizontally scrolling container for the buttons.
+                      - `flex-1` allows it to take up available space.
+                      - `overflow-x-auto` enables scrolling when content overflows.
+                      - `scrollbar-hide` is a common utility to hide the scrollbar visually (requires a plugin, but is safe to include).
                     */}
-                    <div className="w-full lg:flex-1 lg:overflow-x-auto">
-                        <div className="flex flex-col lg:flex-row gap-2">
+                    <div className="flex-1 overflow-x-auto">
+                        <div className="flex items-center gap-2">
                             <Button
                                 variant={currentApp === 'repeater' ? 'default' : 'outline'}
                                 onClick={() => onAppChange('repeater')}
-                                className="gap-2 font-medium px-4 py-2.5 w-full lg:w-auto justify-center"
+                                className="gap-2 font-medium px-4 py-2.5"
                             >
                                 <Repeat className="w-4 h-4" />
                                 Pattern Repeater
@@ -70,7 +72,7 @@ const Navigation = ({ currentApp, onAppChange }) => {
                             <Button
                                 variant={currentApp === 'converter' ? 'default' : 'outline'}
                                 onClick={() => onAppChange('converter')}
-                                className="gap-2 font-medium px-4 py-2.5 w-full lg:w-auto justify-center"
+                                className="gap-2 font-medium px-4 py-2.5"
                             >
                                 <Settings className="w-4 h-4" />
                                 Hexagonal Flat Converter
@@ -79,7 +81,7 @@ const Navigation = ({ currentApp, onAppChange }) => {
                             <Button
                                 variant={currentApp === 'twoAxis' ? 'default' : 'outline'}
                                 onClick={() => onAppChange('twoAxis')}
-                                className="gap-2 font-medium px-4 py-2.5 w-full lg:w-auto justify-center"
+                                className="gap-2 font-medium px-4 py-2.5"
                             >
                                 <Move className="w-4 h-4" />
                                 Two Axis Converter
@@ -88,9 +90,7 @@ const Navigation = ({ currentApp, onAppChange }) => {
                     </div>
 
                     {/* User Menu */}
-                    <div className="self-center lg:self-auto">
-                        <UserMenu />
-                    </div>
+                    <UserMenu />
                 </div>
             </div>
         </Card>
