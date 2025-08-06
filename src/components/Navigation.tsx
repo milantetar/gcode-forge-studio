@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Repeat, Settings, Move } from 'lucide-react';
+import { UserMenu } from '@/components/auth/UserMenu';
 
 interface NavigationProps {
     currentApp: 'repeater' | 'converter' | 'twoAxis';
@@ -11,13 +12,14 @@ interface NavigationProps {
 export const Navigation = ({ currentApp, onAppChange }: NavigationProps) => {
     return (
         <Card className="p-4 mb-8 border-accent/20 shadow-elegant">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div className="text-center sm:text-left">
                     <h2 className="text-lg font-semibold text-primary mb-1">G-Code Tools</h2>
                     <p className="text-sm text-muted-foreground">Choose your G-code processing tool</p>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex items-center gap-4">
+                    <div className="flex gap-3">
                     <Button
                         variant={currentApp === 'repeater' ? 'default' : 'outline'}
                         onClick={() => onAppChange('repeater')}
@@ -44,6 +46,8 @@ export const Navigation = ({ currentApp, onAppChange }: NavigationProps) => {
                         <Move className="w-4 h-4" />
                         Two Axis Converter
                     </Button>
+                    </div>
+                    <UserMenu />
                 </div>
             </div>
         </Card>
