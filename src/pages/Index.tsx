@@ -11,13 +11,7 @@ type AppMode = 'repeater' | 'converter' | 'twoAxis';
 
 const Index: FC = () => {
   const [currentApp, setCurrentApp] = useState<AppMode>('repeater');
-  const { user, loading } = useAuth();
-
-  
-
-  if (!user) {
-    return <AuthPage />;
-  }
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
