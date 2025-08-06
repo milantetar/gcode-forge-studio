@@ -11,19 +11,19 @@ interface NavigationProps {
 
 export const Navigation = ({ currentApp, onAppChange }: NavigationProps) => {
     return (
-        <Card className="p-4 mb-8 border-accent/20 shadow-elegant">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <div className="text-center sm:text-left">
+        <Card className="p-4 mb-6 border-accent/20 shadow-elegant">
+            <div className="flex flex-col gap-4 items-center justify-between">
+                <div className="text-center">
                     <h2 className="text-lg font-semibold text-primary mb-1">G-Code Tools</h2>
                     <p className="text-sm text-muted-foreground">Choose your G-code processing tool</p>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <Button
                             variant={currentApp === 'repeater' ? 'default' : 'outline'}
                             onClick={() => onAppChange('repeater')}
-                            className="gap-2 font-medium"
+                            className="gap-2 font-medium w-full sm:w-auto text-sm py-2"
                         >
                             <Repeat className="w-4 h-4" />
                             Pattern Repeater
@@ -32,7 +32,7 @@ export const Navigation = ({ currentApp, onAppChange }: NavigationProps) => {
                         <Button
                             variant={currentApp === 'converter' ? 'default' : 'outline'}
                             onClick={() => onAppChange('converter')}
-                            className="gap-2 font-medium"
+                            className="gap-2 font-medium w-full sm:w-auto text-sm py-2"
                         >
                             <Settings className="w-4 h-4" />
                             Hexagonal Flat Converter
@@ -41,7 +41,7 @@ export const Navigation = ({ currentApp, onAppChange }: NavigationProps) => {
                         <Button
                             variant={currentApp === 'twoAxis' ? 'default' : 'outline'}
                             onClick={() => onAppChange('twoAxis')}
-                            className="gap-2 font-medium"
+                            className="gap-2 font-medium w-full sm:w-auto text-sm py-2"
                         >
                             <Move className="w-4 h-4" />
                             Two Axis Converter
