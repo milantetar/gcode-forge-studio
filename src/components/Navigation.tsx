@@ -15,12 +15,12 @@ const Card = ({ className, children }) => (
 const Button = ({ variant, className, children, onClick }) => {
     // Base classes for all buttons
     const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:pointer-events-none";
-    
+
     // Classes for the active ('default') and inactive ('outline') button variants
     const variantClasses = variant === 'default'
         ? "bg-cyan-400 text-slate-900 hover:bg-cyan-300 shadow-md shadow-cyan-500/20" // Active button: bright blue
         : "bg-slate-900/50 text-slate-300 hover:bg-slate-700/50 hover:text-white"; // Inactive button: dark with hover effect
-        
+
     return (
         <button className={`${baseClasses} ${variantClasses} ${className}`} onClick={onClick}>
             {children}
@@ -40,7 +40,8 @@ const UserMenu = () => (
 
 const Navigation = ({ currentApp, onAppChange }) => {
     return (
-        <Card className="p-4 md:p-6 mb-8 w-full">
+        // Removed mb-8 (margin-bottom) to eliminate the space below the navbar.
+        <Card className="p-4 md:p-6 w-full">
             {/* Main container for the navbar. */}
             <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
 
@@ -85,7 +86,7 @@ const Navigation = ({ currentApp, onAppChange }) => {
 
                     {/* User Menu */}
                     <div className="self-center sm:self-auto">
-                       <UserMenu />
+                        <UserMenu />
                     </div>
                 </div>
             </div>
@@ -103,7 +104,7 @@ export default function App() {
         <div className="bg-slate-900 min-h-screen w-full font-sans">
             <div className="container mx-auto p-4 md:p-8">
                 <Navigation currentApp={currentApp} onAppChange={setCurrentApp} />
-                
+
                 {/* Your page content for the selected tool will go here */}
             </div>
         </div>
