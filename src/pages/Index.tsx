@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react';
 import  GcodePatternRepeater  from '@/components/GcodePatternRepeater';
 import { GcodeCustomConverter } from '@/components/GcodeCustomConverter';
 import GcodeTwoAxisConverter from '@/components/GcodeTwoAxisConverter';
-import { Navigation } from '@/components/Navigation';
+import  Navigation  from '@/components/Navigation';
 import { AuthPage } from '@/components/auth/AuthPage';
 import { useAuth } from '@/contexts/AuthContext';
 
